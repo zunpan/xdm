@@ -1,12 +1,12 @@
 package cn.panjiahao.dnm.dimesion2.entity;
 
-import cn.panjiahao.dnm.dimesion2.entity.Cell;
 import lombok.Builder;
 import lombok.Data;
 
 
 /**
  * 行，一行有多个单元格
+ *
  * @author panjiahao.cs@foxmail.com
  * @date 2023/3/2 19:11
  */

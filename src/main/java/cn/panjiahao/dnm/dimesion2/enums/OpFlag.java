@@ -11,7 +11,9 @@ public enum OpFlag {
     NONE(0),
     INSERT(1),
     REMOVE(2),
-    REPLACE(3);
+    REPLACE(3),
+    MOVE(4),
+    MOVE_REPLACE(5);
 
     int val;
 

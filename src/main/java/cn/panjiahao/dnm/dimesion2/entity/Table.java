@@ -1,12 +1,11 @@
 package cn.panjiahao.dnm.dimesion2.entity;
 
-import cn.panjiahao.dnm.dimesion2.entity.Column;
-import cn.panjiahao.dnm.dimesion2.entity.Row;
 import lombok.Builder;
 import lombok.Data;
 
 /**
  * 表，一张表有多行多列
+ *
  * @author panjiahao.cs@foxmail.com
  * @date 2023/3/2 19:15
  */
