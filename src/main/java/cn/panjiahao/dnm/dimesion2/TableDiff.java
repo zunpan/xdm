@@ -58,14 +58,16 @@ public class TableDiff {
         getModifyPart(leftTableCellMatrix, rightTableCellMatrix, leftTableRemoveRowIndexSet, leftTableRemoveColIndexSet, rightTableRemoveRowIndexSet, rightTableRemoveColIndexSet);
         // 插入、删除部分
         for (Operation op : rowAddOrRemoveOps) {
+            // 表头行数，比对时去掉表头，比对结果的行数需要加上表头行数
+            int tableHeadRowNum = 1;
             if (op.flag == OpFlag.INSERT.getVal()) {
-                System.out.printf("插入：在左表第%d行后插入 %s%n", op.rowPos1, printCellArr(op.cellArr1));
+                System.out.printf("插入：在左表第%d行后插入 %s%n", op.rowPos1+tableHeadRowNum, printCellArr(op.cellArr1));
             } else if (op.flag == OpFlag.REMOVE.getVal()) {
-                System.out.printf("删除：删除左表的第%d行 %s%n", op.rowPos1, printCellArr(op.cellArr1));
+                System.out.printf("删除：删除左表的第%d行 %s%n", op.rowPos1+tableHeadRowNum, printCellArr(op.cellArr1));
             } else if (op.flag == OpFlag.MOVE.getVal()) {
-                System.out.printf("移动：将左表的第%d行移动到第%d行后面", op.rowPos1, op.rowPos1New);
+                System.out.printf("移动：将左表的第%d行移动到第%d行后面%n", op.rowPos1+tableHeadRowNum, op.rowPos1New+tableHeadRowNum);
             } else if (op.flag == OpFlag.MOVE_REPLACE.getVal()) {
-                System.out.printf("移动且修改：将左表的第%d行移动到第%d行后面，修改成%s", op.rowPos1, op.rowPos1New, printCellArr(op.cellArr1New));
+                System.out.printf("移动且修改：将左表的第%d行移动到第%d行后面，修改成%s%n", op.rowPos1+tableHeadRowNum, op.rowPos1New+tableHeadRowNum, printCellArr(op.cellArr1New));
             }
         }
         for (Operation op : colAddOrRemoveOps) {
@@ -74,9 +76,9 @@ public class TableDiff {
             } else if (op.flag == OpFlag.REMOVE.getVal()) {
                 System.out.printf("删除：删除左表的第%d列 %s%n", op.rowPos1, printCellArr(op.cellArr1));
             } else if (op.flag == OpFlag.MOVE.getVal()) {
-                System.out.printf("移动：将左表的第%d列移动到第%d列后面", op.rowPos1, op.rowPos1New);
+                System.out.printf("移动：将左表的第%d列移动到第%d列后面%n", op.rowPos1, op.rowPos1New);
             } else if (op.flag == OpFlag.MOVE_REPLACE.getVal()) {
-                System.out.printf("移动且修改：将左表的第%d列移动到第%d列后面，修改成%s", op.rowPos1, op.rowPos1New, printCellArr(op.cellArr1New));
+                System.out.printf("移动且修改：将左表的第%d列移动到第%d列后面，修改成%s%n", op.rowPos1, op.rowPos1New, printCellArr(op.cellArr1New));
             }
         }
     }
@@ -160,6 +162,7 @@ public class TableDiff {
     private static void getModifyPart(Cell[][] leftTableCellMatrix, Cell[][] rightTableCellMatrix, Set<Integer> leftTableRemoveRowIndexSet, Set<Integer> leftTableRemoveColIndexSet, Set<Integer> rightTableRemoveRowIndexSet, Set<Integer> rightTableRemoveColIndexSet) {
         List<List<Cell>> newLeftTable = trimTable(leftTableRemoveRowIndexSet, leftTableRemoveColIndexSet, leftTableCellMatrix);
         List<List<Cell>> newRightTable = trimTable(rightTableRemoveRowIndexSet, rightTableRemoveColIndexSet, rightTableCellMatrix);
+        int tableHeadNum = 1;
         for (int i = 0; i < newLeftTable.size(); i++) {
             List<Cell> leftTableRow = newLeftTable.get(i);
             List<Cell> rightTableRow = newRightTable.get(i);
@@ -167,7 +170,7 @@ public class TableDiff {
                 Cell leftTableCell = leftTableRow.get(j);
                 Cell rightTableCell = rightTableRow.get(j);
                 if (!leftTableCell.getValue().equals(rightTableCell.getValue())) {
-                    System.out.printf("将左表第%d行，第%d列的%s替换成%s%n", leftTableCell.getRowPos(), leftTableCell.getColPos(), leftTableCell.getValue(), rightTableCell.getValue());
+                    System.out.printf("将左表第%d行，第%d列的%s替换成%s%n", leftTableCell.getRowPos()+tableHeadNum, leftTableCell.getColPos(), leftTableCell.getValue(), rightTableCell.getValue());
                 }
             }
         }

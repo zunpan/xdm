@@ -17,6 +17,7 @@ public class DiffJob {
      */
     Table leftTable, rightTable;
 
+
     public DiffJob(Table leftTable, Table rightTable) {
         this.leftTable = leftTable;
         this.rightTable = rightTable;
