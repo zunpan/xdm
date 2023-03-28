@@ -5,6 +5,7 @@ import cn.panjiahao.dnm.core.entity.DiffJob;
 import cn.panjiahao.dnm.core.entity.Operation;
 import cn.panjiahao.dnm.core.entity.Table;
 import cn.panjiahao.dnm.core.enums.OpFlag;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.*;
 
@@ -17,13 +18,11 @@ import static cn.panjiahao.dnm.core.util.CommonUtil.*;
 public class TableDiff {
 
     public static void diff(DiffJob diffJob) {
-        // System.out.println("将每一行看成一个元素进行比对：");
-        TwoDimensionDiff.diff(diffJob);
+        TwoDimensionDiff twoDimensionDiff = new TwoDimensionDiff();
+        diffJob.setBodyRowEditMethods(twoDimensionDiff.diff(diffJob.getLeftTableBody(),diffJob.getRightTableBody()));
         // 转置再diff得出列的比对结果
-        DiffJob diffJobT = new DiffJob(transposeMatrix(diffJob.getLeftTable()), transposeMatrix(diffJob.getRightTable()));
-        // System.out.println("将每一列看成一个元素进行比对：");
-        TwoDimensionDiff.diff(diffJobT);
-        getDiffRes(diffJob, diffJobT);
+        diffJob.setBodyColEditMethods(twoDimensionDiff.diff(diffJob.getLeftTableBodyT(),diffJob.getRightTableBodyT()));
+        getDiffRes(diffJob);
     }
 
     /**
@@ -31,13 +30,14 @@ public class TableDiff {
      *
      * @param diffJob 比对任务
      */
-    static void getDiffRes(DiffJob diffJob, DiffJob diffJobT) {
-        Cell[][] leftTableCellMatrix = diffJob.getLeftTable().getCells();
-        Cell[][] rightTableCellMatrix = diffJob.getRightTable().getCells();
-        List<Operation> rowEditMethod = diffJob.getRowEditMethods().get(0);
-        Cell[][] leftTableCellMatrixT = diffJobT.getLeftTable().getCells();
-        Cell[][] rightTableCellMatrixT = diffJobT.getRightTable().getCells();
-        List<Operation> colEditMethod = diffJobT.getRowEditMethods().get(0);
+    static void getDiffRes(DiffJob diffJob) {
+        Cell[][] leftTableBody = diffJob.getLeftTableBody();
+        Cell[][] rightTableBody = diffJob.getRightTableBody();
+        List<Operation> rowEditMethod = diffJob.getBodyRowEditMethods().get(0);
+        Cell[][] leftTableBodyT = diffJob.getLeftTableBodyT();
+        Cell[][] rightTableBodyT = diffJob.getRightTableBodyT();
+        List<Operation> colEditMethod = diffJob.getBodyColEditMethods().get(0);
+        int headRowNumber = diffJob.getLeftTableHead().length;
 
         List<Operation> rowAddOrRemoveOps = new ArrayList<>();
         List<Operation> colAddOrRemoveOps = new ArrayList<>();
@@ -52,22 +52,21 @@ public class TableDiff {
 
         System.out.println("===============最终比对结果==============");
         // 计算移动部分,处理过后 addOrRemoveOps还包含修改的操作
-        getMovePart(leftTableCellMatrix, rightTableCellMatrix, rowAddOrRemoveOps, new HashSet<>(leftTableRemoveRowIndexSet), new HashSet<>(rightTableRemoveRowIndexSet));
-        getMovePart(leftTableCellMatrixT, rightTableCellMatrixT, colAddOrRemoveOps, new HashSet<>(leftTableRemoveColIndexSet), new HashSet<>(rightTableRemoveColIndexSet));
+        getMovePart(leftTableBody, rightTableBody, rowAddOrRemoveOps, new HashSet<>(leftTableRemoveRowIndexSet), new HashSet<>(rightTableRemoveRowIndexSet));
+        getMovePart(leftTableBodyT, rightTableBodyT, colAddOrRemoveOps, new HashSet<>(leftTableRemoveColIndexSet), new HashSet<>(rightTableRemoveColIndexSet));
         // 计算修改部分
-        getModifyPart(leftTableCellMatrix, rightTableCellMatrix, leftTableRemoveRowIndexSet, leftTableRemoveColIndexSet, rightTableRemoveRowIndexSet, rightTableRemoveColIndexSet);
+        getModifyPart(leftTableBody, rightTableBody, leftTableRemoveRowIndexSet, leftTableRemoveColIndexSet, rightTableRemoveRowIndexSet, rightTableRemoveColIndexSet,headRowNumber);
         // 插入、删除部分
         for (Operation op : rowAddOrRemoveOps) {
             // 表头行数，比对时去掉表头，比对结果的行数需要加上表头行数
-            int tableHeadRowNum = 1;
             if (op.flag == OpFlag.INSERT.getVal()) {
-                System.out.printf("插入：在左表第%d行后插入 %s%n", op.rowPos1+tableHeadRowNum, printCellArr(op.cellArr1));
+                System.out.printf("插入：在左表第%d行后插入 %s%n", op.rowPos1+headRowNumber, printCellArr(op.cellArr1));
             } else if (op.flag == OpFlag.REMOVE.getVal()) {
-                System.out.printf("删除：删除左表的第%d行 %s%n", op.rowPos1+tableHeadRowNum, printCellArr(op.cellArr1));
+                System.out.printf("删除：删除左表的第%d行 %s%n", op.rowPos1+headRowNumber, printCellArr(op.cellArr1));
             } else if (op.flag == OpFlag.MOVE.getVal()) {
-                System.out.printf("移动：将左表的第%d行移动到第%d行后面%n", op.rowPos1+tableHeadRowNum, op.rowPos1New+tableHeadRowNum);
+                System.out.printf("移动：将左表的第%d行移动到第%d行后面%n", op.rowPos1+headRowNumber, op.rowPos1New+headRowNumber);
             } else if (op.flag == OpFlag.MOVE_REPLACE.getVal()) {
-                System.out.printf("移动且修改：将左表的第%d行移动到第%d行后面，修改成%s%n", op.rowPos1+tableHeadRowNum, op.rowPos1New+tableHeadRowNum, printCellArr(op.cellArr1New));
+                System.out.printf("移动且修改：将左表的第%d行移动到第%d行后面，修改成%s%n", op.rowPos1+headRowNumber, op.rowPos1New+headRowNumber, printCellArr(op.cellArr1New));
             }
         }
         for (Operation op : colAddOrRemoveOps) {
@@ -98,9 +97,10 @@ public class TableDiff {
         Map<Integer, Integer> rightMap = new HashMap<>();
         Table leftTable = removedRowIndexSetToTable(leftTableCellMatrix, leftTableRemoveIndexSet, leftMap);
         Table rightTable = removedRowIndexSetToTable(rightTableCellMatrix, rightTableRemoveIndexSet, rightMap);
+        TwoDimensionDiff twoDimensionDiff = new TwoDimensionDiff();
         DiffJob diffJob = new DiffJob(leftTable, rightTable);
-        TwoDimensionDiff.diff(diffJob);
-        List<Operation> editMethod = diffJob.getRowEditMethods().get(0);
+        diffJob.setBodyRowEditMethods(twoDimensionDiff.diff(diffJob.getLeftTableBody(),diffJob.getRightTableBody()));
+        List<Operation> editMethod = diffJob.getBodyRowEditMethods().get(0);
         // 如果新表比对后有对应上的行，需要递归计算移动部分
         boolean hasMovedRow = false;
         for (Operation op : editMethod) {
@@ -159,10 +159,10 @@ public class TableDiff {
      * @param rightTableRemoveRowIndexSet 右表删除的行下标
      * @param rightTableRemoveColIndexSet 右表删除的列下标
      */
-    private static void getModifyPart(Cell[][] leftTableCellMatrix, Cell[][] rightTableCellMatrix, Set<Integer> leftTableRemoveRowIndexSet, Set<Integer> leftTableRemoveColIndexSet, Set<Integer> rightTableRemoveRowIndexSet, Set<Integer> rightTableRemoveColIndexSet) {
+    private static void getModifyPart(Cell[][] leftTableCellMatrix, Cell[][] rightTableCellMatrix, Set<Integer> leftTableRemoveRowIndexSet, Set<Integer> leftTableRemoveColIndexSet, Set<Integer> rightTableRemoveRowIndexSet, Set<Integer> rightTableRemoveColIndexSet,int headRowNumber) {
         List<List<Cell>> newLeftTable = trimTable(leftTableRemoveRowIndexSet, leftTableRemoveColIndexSet, leftTableCellMatrix);
         List<List<Cell>> newRightTable = trimTable(rightTableRemoveRowIndexSet, rightTableRemoveColIndexSet, rightTableCellMatrix);
-        int tableHeadNum = 1;
+
         for (int i = 0; i < newLeftTable.size(); i++) {
             List<Cell> leftTableRow = newLeftTable.get(i);
             List<Cell> rightTableRow = newRightTable.get(i);
@@ -170,7 +170,7 @@ public class TableDiff {
                 Cell leftTableCell = leftTableRow.get(j);
                 Cell rightTableCell = rightTableRow.get(j);
                 if (!leftTableCell.getValue().equals(rightTableCell.getValue())) {
-                    System.out.printf("将左表第%d行，第%d列的%s替换成%s%n", leftTableCell.getRowPos()+tableHeadNum, leftTableCell.getColPos(), leftTableCell.getValue(), rightTableCell.getValue());
+                    System.out.printf("将左表第%d行，第%d列的%s替换成%s%n", leftTableCell.getRowPos()+headRowNumber, leftTableCell.getColPos(), leftTableCell.getValue(), rightTableCell.getValue());
                 }
             }
         }
@@ -186,7 +186,12 @@ public class TableDiff {
      */
     static Table removedRowIndexSetToTable(Cell[][] cellMatrix, Set<Integer> removedRowIndexSet, Map<Integer, Integer> indexMap) {
         int rowNum = removedRowIndexSet.size();
-        int colNum = cellMatrix[0].length;
+        int colNum;
+        if (cellMatrix == null || cellMatrix.length == 0) {
+            colNum = 0;
+        } else {
+            colNum = cellMatrix[0].length;
+        }
         Cell[][] res = new Cell[rowNum][colNum];
         Cell.CellBuilder cellBuilder = Cell.builder();
         int index = 0;
@@ -196,7 +201,7 @@ public class TableDiff {
             }
             indexMap.put(++index, removedRowIndex);
         }
-        return Table.builder().cells(res).rowNum(rowNum).colNum(colNum).build();
+        return Table.builder().bodyCells(res).bodyRowNum(rowNum).colNum(colNum).build();
     }
 
     /**

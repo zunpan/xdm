@@ -23,22 +23,20 @@ public class TwoDimensionDiff {
     /**
      * dp[i][j]表示将左表的[1,i]行编辑成右表的[1,j]行的最小编辑距离
      */
-    static int[][] dp;
+    int[][] dp;
     /**
      * path[i][j]记录dp[i][j]从哪个方向转移过来
      */
-    static int[][] path;
+    int[][] path;
 
-    static void diff(DiffJob diffJob) {
-        Cell[][] leftTableCellMatrix = diffJob.getLeftTable().getCells();
-        Cell[][] rightTableCellMatrix = diffJob.getRightTable().getCells();
+    List<List<Operation>> diff(Cell[][] leftTableCellMatrix,Cell[][] rightTableCellMatrix) {
         int rowNum1 = leftTableCellMatrix.length;
         int rowNum2 = rightTableCellMatrix.length;
         levenshteinDP(leftTableCellMatrix, rightTableCellMatrix);
         List<Operation> rowEditMethod = new ArrayList<>();
         List<List<Operation>> rowEditMethods = new ArrayList<>();
         dfs(leftTableCellMatrix, rightTableCellMatrix, rowNum1, rowNum2, rowEditMethod, rowEditMethods);
-        diffJob.setRowEditMethods(rowEditMethods);
+        return rowEditMethods;
     }
 
     /**
@@ -48,7 +46,7 @@ public class TwoDimensionDiff {
      * @param rightTableCellMatrix 右表
      * @return levenshteinDP数组
      */
-    static int[][] levenshteinDP(Cell[][] leftTableCellMatrix, Cell[][] rightTableCellMatrix) {
+    int[][] levenshteinDP(Cell[][] leftTableCellMatrix, Cell[][] rightTableCellMatrix) {
         int rowNum1 = leftTableCellMatrix.length;
         int rowNum2 = rightTableCellMatrix.length;
         // dp[i][j]leftTableCellMatrix[0...i-1]rightTableCellMatrix[0...j-1]的最小编辑距离（cost）
@@ -114,7 +112,7 @@ public class TwoDimensionDiff {
      * @param ops                  编辑方法
      * @param editMethods          所有编辑方法
      */
-    static void dfs(Cell[][] leftTableCellMatrix, Cell[][] rightTableCellMatrix, int i, int j, List<Operation> ops, List<List<Operation>> editMethods) {
+    void dfs(Cell[][] leftTableCellMatrix, Cell[][] rightTableCellMatrix, int i, int j, List<Operation> ops, List<List<Operation>> editMethods) {
         Operation op = new Operation();
         op.rowPos1 = i;
         op.rowPos2 = j;

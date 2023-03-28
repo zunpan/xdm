@@ -23,7 +23,10 @@ public class CommonUtil {
      * @param matrix 矩阵
      * @return 转置矩阵
      */
-    public static Cell[][] transposeMatrix(Cell[][] matrix) {
+    public static Cell[][] transposeTableBody(Cell[][] matrix) {
+        if (matrix == null || matrix.length == 0) {
+            return new Cell[0][];
+        }
         int n = matrix.length;
         int m = matrix[0].length;
 
@@ -38,13 +41,13 @@ public class CommonUtil {
     }
 
     /**
-     * 表转置
+     * 表体转置
      *
      * @param table 表
      * @return 转置表
      */
-    public static Table transposeMatrix(Table table) {
-        Cell[][] cells = table.getCells();
+    public static Table transposeTableBody(Table table) {
+        Cell[][] cells = table.getBodyCells();
         int rowNum = cells.length;
         int colNum = cells[0].length;
         Cell.CellBuilder cellBuilder = Cell.builder();
@@ -56,7 +59,7 @@ public class CommonUtil {
                 res[i][j] = cellBuilder.rowPos(i + 1).colPos(j + 1).value(cells[j][i].getValue()).build();
             }
         }
-        return Table.builder().rowNum(rowNum).colNum(colNum).cells(res).build();
+        return Table.builder().bodyRowNum(rowNum).colNum(colNum).bodyCells(res).build();
     }
 
     /**
@@ -158,7 +161,7 @@ public class CommonUtil {
      * @param matrix Cell矩阵
      */
     public static void printCellMatrix(Cell[][] matrix) {
-        if (matrix == null) {
+        if (matrix == null || matrix.length == 0) {
             return;
         }
         for (Cell[] cells : matrix) {
@@ -188,24 +191,46 @@ public class CommonUtil {
     }
 
     /**
-     * 字符串数组转成Table
+     * 字符串数组转成表头或表体
      *
      * @param strMatrix 字符串数组
-     * @return Table
+     * @return Cell[][]
      */
-    public static Table strMatrixToTable(String[][] strMatrix) {
+    public static Cell[][] strMatrixToCells(String[][] strMatrix) {
+        if (strMatrix == null || strMatrix.length == 0) {
+            return new Cell[0][];
+        }
         int rowNum = strMatrix.length;
         int colNum = strMatrix[0].length;
         Cell[][] cells = new Cell[rowNum][colNum];
         Cell.CellBuilder cellBuilder = Cell.builder();
-        Table.TableBuilder tableBuilder = Table.builder();
 
         for (int i = 0; i < rowNum; i++) {
             for (int j = 0; j < colNum; j++) {
                 cells[i][j] = cellBuilder.rowPos(i + 1).colPos(j + 1).value(strMatrix[i][j]).build();
             }
         }
-        return tableBuilder.rowNum(rowNum).colNum(colNum).cells(cells).build();
+        return cells;
+    }
+
+    /**
+     * 二维列表转二维数组
+     * @param lists 二维列表
+     * @return String[][]
+     */
+    public static String[][] list2Array(List<List<String>> lists) {
+        if (lists == null || lists.size() == 0) {
+            return new String[0][];
+        }
+        int n = lists.size();
+        int m = lists.get(0).size();
+        String[][] res = new String[n][m];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                res[i][j] = lists.get(i).get(j);
+            }
+        }
+        return res;
     }
 
 

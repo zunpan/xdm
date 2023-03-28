@@ -31,6 +31,6 @@ public class EasyExcelTest {
     @Test
     public void noModelRead() {
         // 这里 只要，然后读取第一个sheet 同步读取会自动finish
-        EasyExcel.read(fileName, new NoModelDataListener()).sheet().doRead();
+        EasyExcel.read(fileName, new NoModelDataListener()).sheet().headRowNumber(2).doRead();
     }
 }

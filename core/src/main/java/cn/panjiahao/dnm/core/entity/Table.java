@@ -13,9 +13,13 @@ import lombok.Data;
 @Builder
 public class Table {
     /**
-     * 行数
+     * 表头行数
      */
-    int rowNum;
+    int headRowNum;
+    /**
+     * 表体行数
+     */
+    int bodyRowNum;
     /**
      * 列数
      */
@@ -23,10 +27,10 @@ public class Table {
     /**
      * 表头单元格
      */
-    Cell[][] headerCells;
+    Cell[][] headCells;
     /**
-     * 除表头外所有单元格
+     * 表体单元格
      */
-    Cell[][] cells;
+    Cell[][] bodyCells;
 
 }
