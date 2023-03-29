@@ -117,7 +117,7 @@ public class CommonUtil {
      *
      * @param cellArr Cell数组
      */
-    public static String printCellArr(Cell[] cellArr) {
+    public static String cellArrToString(Cell[] cellArr) {
         if (cellArr == null) {
             return null;
         }
@@ -141,17 +141,17 @@ public class CommonUtil {
             return;
         }
         if (op.flag == OpFlag.NONE.getVal()) {
-            System.out.printf("对应：左表第%d行%s == 右表第%d行%s%n", op.rowPos1, printCellArr(op.cellArr1), op.rowPos2, printCellArr(op.cellArr2));
+            System.out.printf("对应：左表第%d行%s == 右表第%d行%s%n", op.rowPos1, cellArrToString(op.cellArr1), op.rowPos2, cellArrToString(op.cellArr2));
             return;
         }
         if (op.flag == OpFlag.INSERT.getVal()) {
-            System.out.printf("插入：在左表第%d行后插入 %s%n", op.rowPos1, printCellArr(op.cellArr1));
+            System.out.printf("插入：在左表第%d行后插入 %s%n", op.rowPos1, cellArrToString(op.cellArr1));
         }
         if (op.flag == OpFlag.REMOVE.getVal()) {
-            System.out.printf("删除：删除左表的第%d行 %s%n", op.rowPos1, printCellArr(op.cellArr1));
+            System.out.printf("删除：删除左表的第%d行 %s%n", op.rowPos1, cellArrToString(op.cellArr1));
         }
         if (op.flag == OpFlag.REPLACE.getVal()) {
-            System.out.printf("对应 替换：左表第%d个行%s => 右表第%d行%s%n", op.rowPos1, printCellArr(op.cellArr1), op.rowPos2, printCellArr(op.cellArr2));
+            System.out.printf("对应 替换：左表第%d个行%s => 右表第%d行%s%n", op.rowPos1, cellArrToString(op.cellArr1), op.rowPos2, cellArrToString(op.cellArr2));
         }
     }
 

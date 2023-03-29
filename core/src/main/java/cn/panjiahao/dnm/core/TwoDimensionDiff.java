@@ -77,7 +77,13 @@ public class TwoDimensionDiff {
                     replace = false;
                 } else {
                     // 修改的cost是两个字符串数组的LCS距离
-                    leftUp = dp[i - 1][j - 1] + lcsCost(leftTableCellMatrix[i - 1], rightTableCellMatrix[j - 1]);
+                    int lcsCost = lcsCost(leftTableCellMatrix[i - 1], rightTableCellMatrix[j - 1]);
+                    // 当修改的cost等于删除左字符串或右字符串的开销，我们认为不能修改
+                    if (lcsCost == leftTableCellMatrix[i - 1].length - 1  || lcsCost == rightTableCellMatrix[j - 1].length) {
+                        leftUp = Integer.MAX_VALUE;
+                    }else{
+                        leftUp = dp[i - 1][j - 1] + lcsCost;
+                    }
                     replace = true;
                 }
 
