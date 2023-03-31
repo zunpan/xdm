@@ -23,7 +23,7 @@ public class CommonUtil {
      * @param matrix 矩阵
      * @return 转置矩阵
      */
-    public static Cell[][] transposeTableBody(Cell[][] matrix) {
+    public static Cell[][] transposeMatrix(Cell[][] matrix) {
         if (matrix == null || matrix.length == 0) {
             return new Cell[0][];
         }
@@ -46,7 +46,7 @@ public class CommonUtil {
      * @param table 表
      * @return 转置表
      */
-    public static Table transposeTableBody(Table table) {
+    public static Table transposeMatrix(Table table) {
         Cell[][] cells = table.getBodyCells();
         int rowNum = cells.length;
         int colNum = cells[0].length;
@@ -81,7 +81,7 @@ public class CommonUtil {
         }
         int len = cellArr1.length;
         for (int i = 0; i < len; i++) {
-            if (!cellArr1[i].getValue().equals(cellArr2[i].getValue())) {
+            if (cellArr1[i]!=null&&cellArr2[i].getValue()!=null&&!cellArr1[i].getValue().equals(cellArr2[i].getValue())) {
                 return false;
             }
         }
@@ -128,6 +128,28 @@ public class CommonUtil {
         }
         sb.append("\"").append(cellArr[i].getValue()).append("\"").append("]");
 
+        return sb.toString();
+    }
+
+    /**
+     * 打印Cell数组的内容
+     *
+     * @param cellArr Cell数组
+     */
+    public static String cellArrToString(Cell[]... cellArr) {
+        if (cellArr == null) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < cellArr.length; i++) {
+            if (cellArr[i] == null) {
+                continue;
+            }
+            for (int j = 0; j < cellArr[i].length; j++) {
+                sb.append("\"").append(cellArr[i][j].getValue()).append("\"").append(",");
+            }
+        }
+        sb.deleteCharAt(sb.length() - 1).append("]");
         return sb.toString();
     }
 
@@ -222,17 +244,8 @@ public class CommonUtil {
         if (lists == null || lists.size() == 0) {
             return new String[0][];
         }
-        int n = lists.size();
-        int m = lists.get(0).size();
-        String[][] res = new String[n][m];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                res[i][j] = lists.get(i).get(j);
-            }
-        }
-        return res;
+        return lists.stream().map(l-> l.toArray(new String[0])).toArray(String[][]::new);
     }
-
 
     public static List<Operation> deepCopy(List<Operation> ops) {
         List<Operation> res = new ArrayList<>();

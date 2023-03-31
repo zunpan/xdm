@@ -1,5 +1,5 @@
 # 表头行数
-head-row-number: 1
+header-row-number: 1
 
 logging:
   config: classpath:log4j2xml/log4j2-default.xml

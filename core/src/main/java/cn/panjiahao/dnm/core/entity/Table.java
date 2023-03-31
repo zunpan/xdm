@@ -15,7 +15,7 @@ public class Table {
     /**
      * 表头行数
      */
-    int headRowNum;
+    int headerRowNum;
     /**
      * 表体行数
      */
@@ -27,7 +27,7 @@ public class Table {
     /**
      * 表头单元格
      */
-    Cell[][] headCells;
+    Cell[][] headerCells;
     /**
      * 表体单元格
      */

@@ -1,7 +1,6 @@
-package cn.panjiahao.dnm.core;
+package cn.panjiahao.dnm.core.algorithm;
 
 import cn.panjiahao.dnm.core.entity.Cell;
-import cn.panjiahao.dnm.core.entity.DiffJob;
 import cn.panjiahao.dnm.core.entity.Operation;
 import cn.panjiahao.dnm.core.enums.FROM;
 import cn.panjiahao.dnm.core.enums.OpFlag;
@@ -14,8 +13,8 @@ import java.util.List;
 import static cn.panjiahao.dnm.core.util.CommonUtil.deepCopy;
 
 /**
- * 二维数据比对算法
- *
+ * 表体比对算法：levenshtein+lcs
+ * 表头比对算法：levenshtein+追个比对
  * @author panjiahao.cs@foxmail.com
  * @date 2023/3/2 19:43
  */
@@ -29,6 +28,22 @@ public class TwoDimensionDiff {
      */
     int[][] path;
 
+    /**
+     * true表示body，false表示header
+     */
+    boolean isBodyOrHeader;
+    public TwoDimensionDiff() {}
+    public TwoDimensionDiff(boolean isBodyOrHeader) {
+        this.isBodyOrHeader = isBodyOrHeader;
+    }
+
+
+    /**
+     * 二维矩阵diff
+     * @param leftTableCellMatrix 左表单元格矩阵
+     * @param rightTableCellMatrix 右表单元格矩阵
+     * @return
+     */
     List<List<Operation>> diff(Cell[][] leftTableCellMatrix,Cell[][] rightTableCellMatrix) {
         int rowNum1 = leftTableCellMatrix.length;
         int rowNum2 = rightTableCellMatrix.length;
@@ -49,7 +64,7 @@ public class TwoDimensionDiff {
     int[][] levenshteinDP(Cell[][] leftTableCellMatrix, Cell[][] rightTableCellMatrix) {
         int rowNum1 = leftTableCellMatrix.length;
         int rowNum2 = rightTableCellMatrix.length;
-        // dp[i][j]leftTableCellMatrix[0...i-1]rightTableCellMatrix[0...j-1]的最小编辑距离（cost）
+        // dp[i][j]表示leftTableCellMatrix[0...i-1]rightTableCellMatrix[0...j-1]的最小编辑距离（cost）
         dp = new int[rowNum1 + 1][rowNum2 + 1];
         // path记录此方格的来源是多个此类枚举值的布尔或值
         path = new int[rowNum1 + 1][rowNum2 + 1];
@@ -77,12 +92,17 @@ public class TwoDimensionDiff {
                     replace = false;
                 } else {
                     // 修改的cost是两个字符串数组的LCS距离
-                    int lcsCost = lcsCost(leftTableCellMatrix[i - 1], rightTableCellMatrix[j - 1]);
+                    int replaceCost;
+                    if (isBodyOrHeader) {
+                        replaceCost = lcsCost(leftTableCellMatrix[i - 1], rightTableCellMatrix[j - 1]);
+                    } else {
+                        replaceCost = linerCost(leftTableCellMatrix[i - 1], rightTableCellMatrix[j - 1]);
+                    }
                     // 当修改的cost等于删除左字符串或右字符串的开销，我们认为不能修改
-                    if (lcsCost == leftTableCellMatrix[i - 1].length - 1  || lcsCost == rightTableCellMatrix[j - 1].length) {
+                    if (replaceCost == leftTableCellMatrix[i - 1].length - 1  || replaceCost == rightTableCellMatrix[j - 1].length) {
                         leftUp = Integer.MAX_VALUE;
                     }else{
-                        leftUp = dp[i - 1][j - 1] + lcsCost;
+                        leftUp = dp[i - 1][j - 1] + replaceCost;
                     }
                     replace = true;
                 }
@@ -192,5 +212,23 @@ public class TwoDimensionDiff {
         }
 
         return Math.max(rowNum1, rowNum2) - dp[rowNum1][rowNum2];
+    }
+
+
+    static int linerCost(Cell[] cellArr1, Cell[] cellArr2) {
+        int cost = 0;
+        int i = 0;
+        for (; i < cellArr1.length && i < cellArr2.length; i++) {
+            if (!cellArr1[i].getValue().equals(cellArr2[i].getValue())) {
+                cost++;
+            }
+        }
+        if (i < cellArr1.length) {
+            cost += cellArr1.length-i;
+        }
+        if (i < cellArr2.length) {
+            cost += cellArr2.length-i;
+        }
+        return cost;
     }
 }

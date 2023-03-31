@@ -60,8 +60,8 @@ public class DemoDataListener implements ReadListener<DemoData> {
     }
 
     @Override
-    public void invokeHead(Map<Integer, ReadCellData<?>> headMap, AnalysisContext context) {
-        log.info("解析到一条头数据:{}", JSON.toJSONString(headMap));
+    public void invokeHead(Map<Integer, ReadCellData<?>> headerMap, AnalysisContext context) {
+        log.info("解析到一条头数据:{}", JSON.toJSONString(headerMap));
     }
 
     /**

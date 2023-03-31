@@ -1,6 +1,6 @@
 package cn.panjiahao.dnm.app;
 
-import cn.panjiahao.dnm.core.TableDiff;
+import cn.panjiahao.dnm.core.algorithm.TableDiff;
 import cn.panjiahao.dnm.core.entity.DiffJob;
 import cn.panjiahao.dnm.core.entity.Table;
 import cn.panjiahao.dnm.core.util.TableListener;
@@ -22,8 +22,8 @@ import java.io.File;
 @ComponentScan({"cn.panjiahao"})
 public class LocalTest {
 
-    @Value("${head-row-number}")
-    int headRowNumber;
+    @Value("${header-row-number}")
+    int headerRowNumber;
     /**
      * tips：将测试文件放在resources模块下的xlsx文件夹
      */
@@ -31,12 +31,12 @@ public class LocalTest {
     void diffTest(){
         String resourceDirPath = LocalTest.class.getClassLoader().getResource("").getPath();
         String xlsxDirPath = resourceDirPath+ File.separator+"xlsx";
-        String fileName1 = xlsxDirPath + File.separator+ "test1.xlsx";
-        String fileName2 = xlsxDirPath + File.separator+ "test2.xlsx";
-        TableListener listener1 = new TableListener(headRowNumber);
-        TableListener listener2 = new TableListener(headRowNumber);
-        EasyExcel.read(fileName1, listener1).sheet().headRowNumber(headRowNumber).doRead();
-        EasyExcel.read(fileName2, listener2).sheet().headRowNumber(headRowNumber).doRead();
+        String fileName1 = xlsxDirPath + File.separator+ "test14.xlsx";
+        String fileName2 = xlsxDirPath + File.separator+ "test15.xlsx";
+        TableListener listener1 = new TableListener(headerRowNumber);
+        TableListener listener2 = new TableListener(headerRowNumber);
+        EasyExcel.read(fileName1, listener1).sheet().headRowNumber(headerRowNumber).doRead();
+        EasyExcel.read(fileName2, listener2).sheet().headRowNumber(headerRowNumber).doRead();
         Table leftTable = listener1.getTable();
         Table rightTable = listener2.getTable();
 

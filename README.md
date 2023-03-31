@@ -6,8 +6,8 @@
 
 ## 使用
 
-对app模块打包,然后执行`java -jar app-0.1.1.jar [ExcelPath1] [ExcalPath2] [headRowNumber]`
-headRowNumber 不输入时默认是1
+对app模块打包,然后执行`java -jar app-0.1.1.jar [ExcelPath1] [ExcalPath2] [headerRowNumber]`
+headerRowNumber 不输入时默认是1
 
 ## 功能
 

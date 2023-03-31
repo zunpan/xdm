@@ -25,7 +25,7 @@ public class NoModelDataListener extends AnalysisEventListener<Map<Integer, Stri
 
     private int maxRow;
     private int maxCol;
-    private List<List<String>> headRows = new ArrayList<>();
+    private List<List<String>> headerRows = new ArrayList<>();
 
     @SneakyThrows
     @Override
@@ -45,7 +45,7 @@ public class NoModelDataListener extends AnalysisEventListener<Map<Integer, Stri
     }
 
     private void checkHeader() throws Exception {
-        for (List<String> row : headRows) {
+        for (List<String> row : headerRows) {
             if (row.size() < maxCol) {
                 throw new BizException(Code.COLUMN_NAME_IS_NULL);
             }
@@ -59,19 +59,19 @@ public class NoModelDataListener extends AnalysisEventListener<Map<Integer, Stri
 
     @SneakyThrows
     @Override
-    public void invokeHead(Map<Integer, ReadCellData<?>> headMap, AnalysisContext context) {
-        Integer maxKey = headMap.keySet().stream().max(Comparator.comparingInt(k -> k)).get()+1;
+    public void invokeHead(Map<Integer, ReadCellData<?>> headerMap, AnalysisContext context) {
+        Integer maxKey = headerMap.keySet().stream().max(Comparator.comparingInt(k -> k)).get()+1;
         maxCol = Math.max(maxKey, maxCol);
         List<String> row = new ArrayList<>();
         for(int i=1;i<=maxKey;i++){
-            if (headMap.get(i - 1) == null) {
+            if (headerMap.get(i - 1) == null) {
                 row.add("");
             } else {
-                row.add(headMap.get(i - 1).getStringValue());
+                row.add(headerMap.get(i - 1).getStringValue());
             }
         }
-        headRows.add(row);
-        log.info("解析到一条头数据:{}", JSON.toJSONString(headMap));
+        headerRows.add(row);
+        log.info("解析到一条头数据:{}", JSON.toJSONString(headerMap));
     }
 
     @Override

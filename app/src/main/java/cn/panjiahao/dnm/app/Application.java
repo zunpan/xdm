@@ -1,6 +1,6 @@
 package cn.panjiahao.dnm.app;
 
-import cn.panjiahao.dnm.core.TableDiff;
+import cn.panjiahao.dnm.core.algorithm.TableDiff;
 import cn.panjiahao.dnm.core.entity.DiffJob;
 import cn.panjiahao.dnm.core.entity.Table;
 import cn.panjiahao.dnm.core.util.TableListener;
@@ -23,24 +23,24 @@ public class Application {
         try {
             String fileName1 = args[0];
             String fileName2 = args[1];
-            int headRowNumber = 1;
+            int headerRowNumber = 1;
             if (args.length > 2) {
-                headRowNumber = Integer.parseInt(args[2]);
+                headerRowNumber = Integer.parseInt(args[2]);
             }
-            diff(fileName1, fileName2, headRowNumber);
+            diff(fileName1, fileName2, headerRowNumber);
         } catch (Exception e) {
-            log.error("请输入正确的命令：java -jar jarName [ExcelPath1] [ExcelPath2] [headRowNumber]");
+            log.error("请输入正确的命令：java -jar jarName [ExcelPath1] [ExcelPath2] [headerRowNumber]");
         }
     }
 
-    public static void diff(String fileName1,String fileName2,int headRowNumber){
+    public static void diff(String fileName1,String fileName2,int headerRowNumber){
         TableListener listener1;
         TableListener listener2;
         try {
-            listener1 = new TableListener(headRowNumber);
-            listener2 = new TableListener(headRowNumber);
-            EasyExcel.read(fileName1, listener1).sheet().headRowNumber(headRowNumber).doRead();
-            EasyExcel.read(fileName2, listener2).sheet().headRowNumber(headRowNumber).doRead();
+            listener1 = new TableListener(headerRowNumber);
+            listener2 = new TableListener(headerRowNumber);
+            EasyExcel.read(fileName1, listener1).sheet().headRowNumber(headerRowNumber).doRead();
+            EasyExcel.read(fileName2, listener2).sheet().headRowNumber(headerRowNumber).doRead();
             Table leftTable = listener1.getTable();
             Table rightTable = listener2.getTable();
 
