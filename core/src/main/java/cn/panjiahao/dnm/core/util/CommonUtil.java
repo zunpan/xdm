@@ -195,6 +195,117 @@ public class CommonUtil {
         }
     }
 
+    public static void printInsertOp(int row, Cell[] cellArr1,boolean isRowOrCol) {
+        String s1,s2;
+        if (isRowOrCol) {
+            s1 = "行";
+            s2 = "列";
+        } else {
+            s1 = "列";
+            s2 = "行";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("插入：在左表第").append(row).append(s1).append("后的");
+        for (Cell cell : cellArr1) {
+            sb.append("第");
+            if (isRowOrCol) {
+                sb.append(cell.getColPos());
+            } else {
+                sb.append(cell.getRowPos());
+            }
+            sb.append(s2).append("插入").append(cell.getValue()).append(",");
+        }
+        sb.deleteCharAt(sb.length()-1);
+        System.out.println(sb.toString());
+    }
+
+    public static void printRemoveOp(int row, Cell[] cellArr1,boolean isRowOrCol) {
+        String s1,s2;
+        if (isRowOrCol) {
+            s1 = "行";
+            s2 = "列";
+        } else {
+            s1 = "列";
+            s2 = "行";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("删除：删除左表的第").append(row).append(s1).append("的");
+        for (Cell cell : cellArr1) {
+            sb.append("第");
+            if (isRowOrCol) {
+                sb.append(cell.getColPos());
+            } else {
+                sb.append(cell.getRowPos());
+            }
+            sb.append(s2).append("的").append(cell.getValue()).append(",");
+        }
+        sb.deleteCharAt(sb.length()-1);
+        System.out.println(sb.toString());
+    }
+
+    public static void printReplaceOp(int row, Cell[] cellArr1, Cell[] cellArr2,boolean isRowOrCol) {
+        String s1,s2;
+        if (isRowOrCol) {
+            s1 = "行";
+            s2 = "列";
+        } else {
+            s1 = "列";
+            s2 = "行";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("修改：将左表的第").append(row).append(s1).append("的");
+        int maxLen = Math.max(cellArr1.length, cellArr2.length);
+        for (int i = 0; i < cellArr1.length; i++) {
+            if (!cellArr1[i].getValue().equals(cellArr2[i].getValue())) {
+                sb.append("第");
+                if (isRowOrCol) {
+                    sb.append(cellArr1[i].getColPos());
+                } else {
+                    sb.append(cellArr1[i].getRowPos());
+                }
+                sb.append(s2).append("的").append(cellArr1[i].getValue()).append("修改成").append(cellArr2[i].getValue()).append(",");
+            }
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        System.out.println(sb.toString());
+    }
+
+    public static void printMoveOp(int row, int rowNew,boolean isRowOrCol) {
+        String s1;
+        if (isRowOrCol) {
+            s1 = "行";
+        } else {
+            s1 = "列";
+        }
+        System.out.printf("移动：将左表的第%d%s移动到第%d%s后面%n", row, s1,rowNew,s1);
+    }
+
+    public static void printMoveReplaceOp(int row, int rowNew, Cell[] cellArr1,Cell[] cellArr1New,boolean isRowOrCol) {
+        String s1,s2;
+        if (isRowOrCol) {
+            s1 = "行";
+            s2 = "列";
+        } else {
+            s1 = "列";
+            s2 = "行";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("移动且修改：将左表的第").append(row).append(s1).append("移动到第").append(rowNew).append(s1).append("后面,");
+        for (int i = 0; i < cellArr1.length; i++) {
+            if (!cellArr1[i].getValue().equals(cellArr1New[i].getValue())) {
+                sb.append("第");
+                if (isRowOrCol) {
+                    sb.append(cellArr1[i].getColPos());
+                } else {
+                    sb.append(cellArr1[i].getRowPos());
+                }
+                sb.append(s2).append("的").append(cellArr1[i].getValue()).append("修改成").append(cellArr1New[i].getValue()).append(",");
+            }
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        System.out.println(sb.toString());
+    }
+
     /**
      * 输入矩阵
      *

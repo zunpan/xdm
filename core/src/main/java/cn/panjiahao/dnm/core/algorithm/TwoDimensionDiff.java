@@ -14,7 +14,7 @@ import static cn.panjiahao.dnm.core.util.CommonUtil.deepCopy;
 
 /**
  * 表体比对算法：levenshtein+lcs
- * 表头比对算法：levenshtein+追个比对
+ * 表头比对算法：levenshtein+逐个比对
  * @author panjiahao.cs@foxmail.com
  * @date 2023/3/2 19:43
  */

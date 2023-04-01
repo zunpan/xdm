@@ -1,5 +1,6 @@
 package cn.panjiahao.dnm.app;
 
+import cn.panjiahao.dnm.core.algorithm.NoHeaderTableDiff;
 import cn.panjiahao.dnm.core.algorithm.TableDiff;
 import cn.panjiahao.dnm.core.entity.DiffJob;
 import cn.panjiahao.dnm.core.entity.Table;
@@ -41,6 +42,10 @@ public class LocalTest {
         Table rightTable = listener2.getTable();
 
         DiffJob diffJob = new DiffJob(leftTable, rightTable);
-        TableDiff.diff(diffJob);
+        if (headerRowNumber == 0) {
+            NoHeaderTableDiff.diff(diffJob);
+        } else {
+            TableDiff.diff(diffJob);
+        }
     }
 }
