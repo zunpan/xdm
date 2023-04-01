@@ -37,6 +37,7 @@ public class TableListener extends AnalysisEventListener<Map<Integer, String>> {
     public TableListener() {
         this.headerRowNumber = 0;
     }
+
     public TableListener(int headerRowNumber) {
         this.headerRowNumber = headerRowNumber;
         this.tableBody = new ArrayList<>(headerRowNumber);
@@ -59,7 +60,7 @@ public class TableListener extends AnalysisEventListener<Map<Integer, String>> {
             for (int i = 0; i < maxCol; i++) {
                 if (data.get(i) == null) {
                     row.add("");
-                }else{
+                } else {
                     row.add(data.get(i));
                 }
             }
@@ -69,7 +70,7 @@ public class TableListener extends AnalysisEventListener<Map<Integer, String>> {
             for (int i = 0; i < maxKey; i++) {
                 if (data.get(i) == null) {
                     row.add("");
-                }else{
+                } else {
                     row.add(data.get(i));
                 }
             }
@@ -79,14 +80,15 @@ public class TableListener extends AnalysisEventListener<Map<Integer, String>> {
 
     @Override
     public void doAfterAllAnalysed(AnalysisContext context) {
-        log.info(String.format("所有数据解析完成！该表有%d行,%d列", tableBody.size(),maxCol));
+        log.info(String.format("所有数据解析完成！该表有%d行,%d列", tableBody.size(), maxCol));
     }
+
     @Override
     public void invokeHead(Map<Integer, ReadCellData<?>> headerMap, AnalysisContext context) {
-        int maxKey = headerMap.keySet().stream().max(Comparator.comparingInt(k -> k)).get()+1;
+        int maxKey = headerMap.keySet().stream().max(Comparator.comparingInt(k -> k)).get() + 1;
         maxCol = Math.max(maxKey, maxCol);
         List<String> row = new ArrayList<>();
-        for(int i=0;i<maxKey;i++){
+        for (int i = 0; i < maxKey; i++) {
             if (headerMap.get(i) == null) {
                 row.add("");
             } else {
@@ -99,6 +101,7 @@ public class TableListener extends AnalysisEventListener<Map<Integer, String>> {
 
     /**
      * 检查表头是否有空的单元格
+     *
      * @throws BizException
      */
     private void checkHeader() throws BizException {

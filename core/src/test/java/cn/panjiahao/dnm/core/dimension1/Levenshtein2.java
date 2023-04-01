@@ -18,7 +18,7 @@ public class Levenshtein2 {
     static int[][] path;
 
     @Test
-    void levenshtein2Test(){
+    void levenshtein2Test() {
         String[] text1 = new String[]{"aaa", "b", "c", "b", "d", "aa", "b"};
         String[] text2 = new String[]{"bb", "d", "c", "ac", "b", "a"};
         int len1 = text1.length;
@@ -27,6 +27,7 @@ public class Levenshtein2 {
         List<Operation> ops = new ArrayList<Operation>();
         dfs(text1, text2, len1, len2, ops);
     }
+
     /**
      * 比对的基本单位是一个字符串
      *

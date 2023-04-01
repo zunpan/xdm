@@ -10,10 +10,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static cn.panjiahao.dnm.core.util.CommonUtil.*;
+import static cn.panjiahao.dnm.core.util.CommonUtil.cellArrEquals;
+import static cn.panjiahao.dnm.core.util.CommonUtil.cellArrToString;
 
 /**
  * 无表头的表diff
+ *
  * @author panjiahao.cs@foxmail.com
  * @date 2023/3/31 23:55
  */
@@ -150,7 +152,7 @@ public class NoHeaderTableDiff {
         displayRowAndCol[1] = checkDiffCanCoverTableDiff(colNoneOps, colAddOrRemoveOps, colReplaceOps, leftColNumber, rightColNumber);
         // 如果行和列的变动都可以能覆盖表的变动，我们选一个一一对应的多，变动操作少的进行展示
         if (displayRowAndCol[0] && displayRowAndCol[1]) {
-            if (rowNoneOps.size()>colNoneOps.size()) {
+            if (rowNoneOps.size() > colNoneOps.size()) {
                 displayRowAndCol[1] = false;
             } else if (rowNoneOps.size() == colNoneOps.size()) {
                 if (rowAddOrRemoveOps.size() + rowMoveOps.size() + rowReplaceOps.size() <= colAddOrRemoveOps.size() + colMoveOps.size() + colReplaceOps.size()) {
@@ -367,7 +369,7 @@ public class NoHeaderTableDiff {
     /**
      * 从编辑方法中分出一一对应、增、删、替换的操作
      *
-     * @param editMethod     编辑方法
+     * @param editMethod 编辑方法
      */
     static List<List<Operation>> splitOpFromEditMethod(List<Operation> editMethod) {
         List<List<Operation>> splitOps = new ArrayList<>(4);

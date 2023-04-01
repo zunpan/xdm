@@ -18,7 +18,7 @@ public class Levenshtein1 {
     static int[][] path;
 
     @Test
-    void levenshtein1Test(){
+    void levenshtein1Test() {
         String text1 = "abcbdab";
         String text2 = "bdcaba";
         int len1 = text1.length();

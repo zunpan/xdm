@@ -15,6 +15,7 @@ import static cn.panjiahao.dnm.core.util.CommonUtil.deepCopy;
 /**
  * 表体比对算法：levenshtein+lcs
  * 表头比对算法：levenshtein+逐个比对
+ *
  * @author panjiahao.cs@foxmail.com
  * @date 2023/3/2 19:43
  */
@@ -32,7 +33,10 @@ public class TwoDimensionDiff {
      * true表示body，false表示header
      */
     boolean isBodyOrHeader;
-    public TwoDimensionDiff() {}
+
+    public TwoDimensionDiff() {
+    }
+
     public TwoDimensionDiff(boolean isBodyOrHeader) {
         this.isBodyOrHeader = isBodyOrHeader;
     }
@@ -40,11 +44,12 @@ public class TwoDimensionDiff {
 
     /**
      * 二维矩阵diff
-     * @param leftTableCellMatrix 左表单元格矩阵
+     *
+     * @param leftTableCellMatrix  左表单元格矩阵
      * @param rightTableCellMatrix 右表单元格矩阵
      * @return
      */
-    List<List<Operation>> diff(Cell[][] leftTableCellMatrix,Cell[][] rightTableCellMatrix) {
+    List<List<Operation>> diff(Cell[][] leftTableCellMatrix, Cell[][] rightTableCellMatrix) {
         int rowNum1 = leftTableCellMatrix.length;
         int rowNum2 = rightTableCellMatrix.length;
         levenshteinDP(leftTableCellMatrix, rightTableCellMatrix);
@@ -99,9 +104,9 @@ public class TwoDimensionDiff {
                         replaceCost = linerCost(leftTableCellMatrix[i - 1], rightTableCellMatrix[j - 1]);
                     }
                     // 当修改的cost等于删除左字符串或右字符串的开销，我们认为不能修改
-                    if (replaceCost == leftTableCellMatrix[i - 1].length - 1  || replaceCost == rightTableCellMatrix[j - 1].length) {
+                    if (replaceCost == leftTableCellMatrix[i - 1].length - 1 || replaceCost == rightTableCellMatrix[j - 1].length) {
                         leftUp = Integer.MAX_VALUE;
-                    }else{
+                    } else {
                         leftUp = dp[i - 1][j - 1] + replaceCost;
                     }
                     replace = true;
@@ -224,10 +229,10 @@ public class TwoDimensionDiff {
             }
         }
         if (i < cellArr1.length) {
-            cost += cellArr1.length-i;
+            cost += cellArr1.length - i;
         }
         if (i < cellArr2.length) {
-            cost += cellArr2.length-i;
+            cost += cellArr2.length - i;
         }
         return cost;
     }

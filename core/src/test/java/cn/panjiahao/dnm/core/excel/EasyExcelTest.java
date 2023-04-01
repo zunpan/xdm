@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 public class EasyExcelTest {
     Logger log = LoggerFactory.getLogger(EasyExcelTest.class);
     String fileName = "C:\\code\\dnm\\app\\src\\main\\resources\\xlsx\\demo.xlsx";
+
     @Test
     void simpleRead() {
         // 这里默认每次会读取100条数据 然后返回过来 直接调用使用数据就行
@@ -25,6 +26,7 @@ public class EasyExcelTest {
             }
         })).sheet().doRead();
     }
+
     /**
      * 不创建对象的读
      */

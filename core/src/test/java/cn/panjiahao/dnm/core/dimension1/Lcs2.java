@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 public class Lcs2 {
 
     @Test
-    void lcs2Test(){
+    void lcs2Test() {
         String[] text1 = new String[]{"a", "b", "c", "b", "d", "a", "b"};
         String[] text2 = new String[]{"b", "d", "c", "a", "b", "a"};
         System.out.println("最长公共子序列：" + lcs(text1, text2));

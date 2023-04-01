@@ -22,11 +22,11 @@ public class DemoDataListener implements ReadListener<DemoData> {
      * 缓存的数据
      */
     private List<DemoData> cachedDataList = ListUtils.newArrayListWithExpectedSize(BATCH_COUNT);
+
     /**
      * 假设这个是一个DAO，当然有业务逻辑这个也可以是一个service。当然如果不用存储这个对象没用。
      */
     // private DemoDAO demoDAO;
-
     public DemoDataListener() {
         // 这里是demo，所以随便new一个。实际使用如果到了spring,请使用下面的有参构造函数
         // demoDAO = new DemoDAO();

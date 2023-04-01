@@ -16,8 +16,8 @@ public class DiffJob {
     /**
      * 左表和右表
      */
-    Cell[][] leftTableHeader, rightTableHeader,leftTableHeaderT,rightTableHeaderT;
-    Cell[][] leftTableBody,leftTableBodyT,rightTableBody,rightTableBodyT;
+    Cell[][] leftTableHeader, rightTableHeader, leftTableHeaderT, rightTableHeaderT;
+    Cell[][] leftTableBody, leftTableBodyT, rightTableBody, rightTableBodyT;
 
     public DiffJob(Table leftTable, Table rightTable) {
         this.leftTableBody = leftTable.getBodyCells();
@@ -30,6 +30,7 @@ public class DiffJob {
         this.rightTableHeaderT = CommonUtil.transposeMatrix(this.rightTableHeader);
 
     }
+
     /**
      * 关于表体行的所有编辑方法
      */

@@ -25,15 +25,16 @@ public class LocalTest {
 
     @Value("${header-row-number}")
     int headerRowNumber;
+
     /**
      * tips：将测试文件放在resources模块下的xlsx文件夹
      */
     @Test
-    void diffTest(){
+    void diffTest() {
         String resourceDirPath = LocalTest.class.getClassLoader().getResource("").getPath();
-        String xlsxDirPath = resourceDirPath+ File.separator+"xlsx";
-        String fileName1 = xlsxDirPath + File.separator+ "test14.xlsx";
-        String fileName2 = xlsxDirPath + File.separator+ "test15.xlsx";
+        String xlsxDirPath = resourceDirPath + File.separator + "xlsx";
+        String fileName1 = xlsxDirPath + File.separator + "test14.xlsx";
+        String fileName2 = xlsxDirPath + File.separator + "test15.xlsx";
         TableListener listener1 = new TableListener(headerRowNumber);
         TableListener listener2 = new TableListener(headerRowNumber);
         EasyExcel.read(fileName1, listener1).sheet().headRowNumber(headerRowNumber).doRead();

@@ -31,7 +31,7 @@ public class NoModelDataListener extends AnalysisEventListener<Map<Integer, Stri
     @Override
     public void invoke(Map<Integer, String> data, AnalysisContext context) {
         checkHeader();
-        Integer maxKey = data.keySet().stream().max(Comparator.comparingInt(k -> k)).get()+1;
+        Integer maxKey = data.keySet().stream().max(Comparator.comparingInt(k -> k)).get() + 1;
         if (maxKey > maxCol) {
             throw new BizException(Code.ROW_SPAN_OVER_TABLE_SPAN);
         }
@@ -60,10 +60,10 @@ public class NoModelDataListener extends AnalysisEventListener<Map<Integer, Stri
     @SneakyThrows
     @Override
     public void invokeHead(Map<Integer, ReadCellData<?>> headerMap, AnalysisContext context) {
-        Integer maxKey = headerMap.keySet().stream().max(Comparator.comparingInt(k -> k)).get()+1;
+        Integer maxKey = headerMap.keySet().stream().max(Comparator.comparingInt(k -> k)).get() + 1;
         maxCol = Math.max(maxKey, maxCol);
         List<String> row = new ArrayList<>();
-        for(int i=1;i<=maxKey;i++){
+        for (int i = 1; i <= maxKey; i++) {
             if (headerMap.get(i - 1) == null) {
                 row.add("");
             } else {
@@ -77,7 +77,7 @@ public class NoModelDataListener extends AnalysisEventListener<Map<Integer, Stri
     @Override
     public void doAfterAllAnalysed(AnalysisContext context) {
         saveData();
-        log.info(String.format("该表有%d行,%d列",maxRow,maxCol));
+        log.info(String.format("该表有%d行,%d列", maxRow, maxCol));
         log.info("所有数据解析完成！");
     }
 

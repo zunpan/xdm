@@ -81,7 +81,7 @@ public class CommonUtil {
         }
         int len = cellArr1.length;
         for (int i = 0; i < len; i++) {
-            if (cellArr1[i]!=null&&cellArr2[i].getValue()!=null&&!cellArr1[i].getValue().equals(cellArr2[i].getValue())) {
+            if (cellArr1[i] != null && cellArr2[i].getValue() != null && !cellArr1[i].getValue().equals(cellArr2[i].getValue())) {
                 return false;
             }
         }
@@ -195,8 +195,8 @@ public class CommonUtil {
         }
     }
 
-    public static void printInsertOp(int row, Cell[] cellArr1,boolean isRowOrCol) {
-        String s1,s2;
+    public static void printInsertOp(int row, Cell[] cellArr1, boolean isRowOrCol) {
+        String s1, s2;
         if (isRowOrCol) {
             s1 = "行";
             s2 = "列";
@@ -215,12 +215,12 @@ public class CommonUtil {
             }
             sb.append(s2).append("插入").append(cell.getValue()).append(",");
         }
-        sb.deleteCharAt(sb.length()-1);
+        sb.deleteCharAt(sb.length() - 1);
         System.out.println(sb.toString());
     }
 
-    public static void printRemoveOp(int row, Cell[] cellArr1,boolean isRowOrCol) {
-        String s1,s2;
+    public static void printRemoveOp(int row, Cell[] cellArr1, boolean isRowOrCol) {
+        String s1, s2;
         if (isRowOrCol) {
             s1 = "行";
             s2 = "列";
@@ -239,12 +239,12 @@ public class CommonUtil {
             }
             sb.append(s2).append("的").append(cell.getValue()).append(",");
         }
-        sb.deleteCharAt(sb.length()-1);
+        sb.deleteCharAt(sb.length() - 1);
         System.out.println(sb.toString());
     }
 
-    public static void printReplaceOp(int row, Cell[] cellArr1, Cell[] cellArr2,boolean isRowOrCol) {
-        String s1,s2;
+    public static void printReplaceOp(int row, Cell[] cellArr1, Cell[] cellArr2, boolean isRowOrCol) {
+        String s1, s2;
         if (isRowOrCol) {
             s1 = "行";
             s2 = "列";
@@ -270,18 +270,18 @@ public class CommonUtil {
         System.out.println(sb.toString());
     }
 
-    public static void printMoveOp(int row, int rowNew,boolean isRowOrCol) {
+    public static void printMoveOp(int row, int rowNew, boolean isRowOrCol) {
         String s1;
         if (isRowOrCol) {
             s1 = "行";
         } else {
             s1 = "列";
         }
-        System.out.printf("移动：将左表的第%d%s移动到第%d%s后面%n", row, s1,rowNew,s1);
+        System.out.printf("移动：将左表的第%d%s移动到第%d%s后面%n", row, s1, rowNew, s1);
     }
 
-    public static void printMoveReplaceOp(int row, int rowNew, Cell[] cellArr1,Cell[] cellArr1New,boolean isRowOrCol) {
-        String s1,s2;
+    public static void printMoveReplaceOp(int row, int rowNew, Cell[] cellArr1, Cell[] cellArr1New, boolean isRowOrCol) {
+        String s1, s2;
         if (isRowOrCol) {
             s1 = "行";
             s2 = "列";
@@ -348,6 +348,7 @@ public class CommonUtil {
 
     /**
      * 二维列表转二维数组
+     *
      * @param lists 二维列表
      * @return String[][]
      */
@@ -355,7 +356,7 @@ public class CommonUtil {
         if (lists == null || lists.size() == 0) {
             return new String[0][];
         }
-        return lists.stream().map(l-> l.toArray(new String[0])).toArray(String[][]::new);
+        return lists.stream().map(l -> l.toArray(new String[0])).toArray(String[][]::new);
     }
 
     public static List<Operation> deepCopy(List<Operation> ops) {

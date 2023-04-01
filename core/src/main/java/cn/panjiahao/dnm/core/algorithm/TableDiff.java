@@ -14,6 +14,7 @@ import static cn.panjiahao.dnm.core.util.CommonUtil.*;
 
 /**
  * 固定表头行数的表diff
+ *
  * @author panjiahao.cs@foxmail.com
  * @date 2023/3/21 15:03
  */
@@ -28,11 +29,12 @@ public class TableDiff {
         List<Cell[][]> tables = uniformTableSpan(diffJob);
         List<List<Operation>> rowEditMethods = tableBodyDiff.diff(tables.get(0), tables.get(1));
         diffJob.setBodyRowEditMethods(rowEditMethods);
-        getRowDiffRes(tables.get(0), tables.get(1), rowEditMethods.get(0),diffJob.getLeftTableHeader().length);
+        getRowDiffRes(tables.get(0), tables.get(1), rowEditMethods.get(0), diffJob.getLeftTableHeader().length);
     }
 
     /**
      * 根据表头diff结果去掉增删的列，顺便输出列的比对结果
+     *
      * @param diffJob
      * @return
      */
@@ -54,9 +56,9 @@ public class TableDiff {
         System.out.println("列比对结果：");
         for (Operation op : colAddOrRemoveOps) {
             if (op.flag == OpFlag.INSERT.getVal()) {
-                System.out.printf("插入：在左表第%d列后插入表头 %s , 以及数据列 %s%n", op.rowPos1, cellArrToString(op.cellArr1),cellArrToString(rightTableBodyT[op.rowPos2-1]));
+                System.out.printf("插入：在左表第%d列后插入表头 %s , 以及数据列 %s%n", op.rowPos1, cellArrToString(op.cellArr1), cellArrToString(rightTableBodyT[op.rowPos2 - 1]));
             } else if (op.flag == OpFlag.REMOVE.getVal()) {
-                System.out.printf("删除：删除左表的第%d列表头 %s , 以及数据列 %s%n", op.rowPos1, cellArrToString(op.cellArr1),cellArrToString(leftTableBodyT[op.rowPos1-1]));
+                System.out.printf("删除：删除左表的第%d列表头 %s , 以及数据列 %s%n", op.rowPos1, cellArrToString(op.cellArr1), cellArrToString(leftTableBodyT[op.rowPos1 - 1]));
             }
         }
         for (Operation op : colReplaceOps) {
@@ -100,17 +102,17 @@ public class TableDiff {
         for (Operation op : rowAddOrRemoveOrMoveOps) {
             if (op.flag == OpFlag.INSERT.getVal()) {
                 // headerRowNumber表头行数，比对时去掉表头，比对结果的行数需要加上表头行数
-                printInsertOp(op.rowPos1 + headerRowNumber, op.cellArr1,true);
+                printInsertOp(op.rowPos1 + headerRowNumber, op.cellArr1, true);
             } else if (op.flag == OpFlag.REMOVE.getVal()) {
-                printRemoveOp(op.rowPos1 + headerRowNumber, op.cellArr1,true);
+                printRemoveOp(op.rowPos1 + headerRowNumber, op.cellArr1, true);
             } else if (op.flag == OpFlag.MOVE.getVal()) {
-                printMoveOp(op.rowPos1 + headerRowNumber, op.rowPos1New + headerRowNumber,true);
+                printMoveOp(op.rowPos1 + headerRowNumber, op.rowPos1New + headerRowNumber, true);
             } else if (op.flag == OpFlag.MOVE_REPLACE.getVal()) {
-                printMoveReplaceOp(op.rowPos1 + headerRowNumber, op.rowPos1New + headerRowNumber, op.cellArr1,op.cellArr1New,true);
+                printMoveReplaceOp(op.rowPos1 + headerRowNumber, op.rowPos1New + headerRowNumber, op.cellArr1, op.cellArr1New, true);
             }
         }
         for (Operation op : rowReplaceOps) {
-            printReplaceOp( op.rowPos1 + headerRowNumber,op.cellArr1,op.cellArr2,true);
+            printReplaceOp(op.rowPos1 + headerRowNumber, op.cellArr1, op.cellArr2, true);
         }
     }
 
@@ -135,7 +137,7 @@ public class TableDiff {
         displayRowAndCol[1] = checkDiffCanCoverTableDiff(colNoneOps, colAddOrRemoveOps, colReplaceOps, leftColNumber, rightColNumber);
         // 如果行和列的变动都可以能覆盖表的变动，我们选一个一一对应的多，变动操作少的进行展示
         if (displayRowAndCol[0] && displayRowAndCol[1]) {
-            if (rowNoneOps.size()>colNoneOps.size()) {
+            if (rowNoneOps.size() > colNoneOps.size()) {
                 displayRowAndCol[1] = false;
             } else if (rowNoneOps.size() == colNoneOps.size()) {
                 if (rowAddOrRemoveOps.size() + rowMoveOps.size() + rowReplaceOps.size() <= colAddOrRemoveOps.size() + colMoveOps.size() + colReplaceOps.size()) {
@@ -174,8 +176,8 @@ public class TableDiff {
     /**
      * 计算移动部分
      *
-     * @param leftTableBody      左表
-     * @param rightTableBody     右表
+     * @param leftTableBody            左表
+     * @param rightTableBody           右表
      * @param addOrRemoveOps           增删操作
      * @param moveOps                  移动操作
      * @param leftTableRemoveIndexSet  左表删除的行下标集合
@@ -297,8 +299,8 @@ public class TableDiff {
     /**
      * 去掉左表和右表删除的行和列，剩下的单元格逐个比较得出修改结果
      *
-     * @param leftTableBody         左表
-     * @param rightTableBody        右表
+     * @param leftTableBody               左表
+     * @param rightTableBody              右表
      * @param leftTableRemoveRowIndexSet  左表删除的行下标
      * @param leftTableRemoveColIndexSet  左表删除的列下标
      * @param rightTableRemoveRowIndexSet 右表删除的行下标
@@ -352,7 +354,7 @@ public class TableDiff {
     /**
      * 从编辑方法中分出一一对应、增、删、替换的操作
      *
-     * @param editMethod     编辑方法
+     * @param editMethod 编辑方法
      */
     static List<List<Operation>> splitOpFromEditMethod(List<Operation> editMethod) {
         List<List<Operation>> splitOps = new ArrayList<>(4);

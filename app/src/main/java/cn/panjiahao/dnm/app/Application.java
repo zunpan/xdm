@@ -35,7 +35,7 @@ public class Application {
     }
 
 
-    public static void diff(String fileName1,String fileName2,int headerRowNumber){
+    public static void diff(String fileName1, String fileName2, int headerRowNumber) {
         TableListener listener1;
         TableListener listener2;
         try {
