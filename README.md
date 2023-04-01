@@ -1,8 +1,8 @@
-# dnm
+# xdm
 
 ## 介绍
 
-该系统支持Excel文件的比对
+xdm(Excel-diff-merge)支持Excel文件的比对
 
 ## 功能
 
