@@ -104,7 +104,7 @@ public class TwoDimensionDiff {
                         replaceCost = linerCost(leftTableCellMatrix[i - 1], rightTableCellMatrix[j - 1]);
                     }
                     // 当修改的cost等于删除左字符串或右字符串的开销，我们认为不能修改
-                    if (replaceCost == leftTableCellMatrix[i - 1].length - 1 || replaceCost == rightTableCellMatrix[j - 1].length) {
+                    if (replaceCost == leftTableCellMatrix[i - 1].length || replaceCost == rightTableCellMatrix[j - 1].length) {
                         leftUp = Integer.MAX_VALUE;
                     } else {
                         leftUp = dp[i - 1][j - 1] + replaceCost;
